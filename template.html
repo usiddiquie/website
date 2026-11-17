@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{title}}</title>
+  <meta name="description" content="{{description}}">
+  <link rel="canonical" href="{{url}}">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="{{title}}">
+  <meta property="og:description" content="{{description}}">
+  <meta property="og:url" content="{{url}}">
+  <meta property="og:image" content="{{og_image}}">
+  <meta name="twitter:card" content="summary">
+  <meta name="theme-color" content="#fff8f3">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="preload" href="fonts/gelasio-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="{{{css}}}">
+  <script src="{{{js}}}" defer></script>
+</head>
+<body>
+  <div class="page">
+    <header class="intro">
+      <img class="avatar" src="{{{avatar}}}" alt="Portrait of {{name}}" width="200" height="200">
+      <div class="intro__text">
+        <h1>{{name}}</h1>
+        <p class="tagline">{{tagline}}</p>
+      </div>
+      <p class="links">{{{links}}}</p>
+    </header>
+
+    <div class="bio">
+{{{about}}}
+    </div>
+
+    <main>
+      <section class="section" aria-labelledby="publications-title">
+        <div class="section__head">
+          <h2 id="publications-title">{{pubs_title}}</h2>
+          <a class="more" href="{{pubs_link_url}}">{{pubs_link_text}}{{{arrow}}}</a>
+        </div>
+        <ul class="pubs">
+{{{pubs}}}
+        </ul>
+      </section>
+
+      <section class="section" aria-labelledby="projects-title">
+        <div class="section__head">
+          <h2 id="projects-title">{{projects_title}}</h2>
+          <a class="more" href="{{projects_link_url}}">{{projects_link_text}}{{{arrow}}}</a>
+        </div>
+        <ul class="cards">
+{{{projects}}}
+        </ul>
+      </section>
+    </main>
+  </div>
+  <footer class="bars" aria-hidden="true"></footer>
+</body>
+</html>
