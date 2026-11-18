@@ -17,7 +17,8 @@
       play: () => video.play().catch(() => {}),
       stop: () => {
         video.pause();
-        if (video.readyState > 0) video.currentTime = 0; // the first frame equals the still
+        // load() resets the element, so the poster (the still) is shown again instead of frame 0 of the clip.
+        if (video.readyState > 0) video.load();
       },
     });
   }
