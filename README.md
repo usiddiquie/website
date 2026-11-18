@@ -102,22 +102,29 @@ repository**, separate from the private job-search repo.
 The build fails on purpose if `links.md` points to a file that is not in `public/` (for example
 `cv.pdf`), so a dead link cannot be deployed. Add the file or remove the link.
 
-## Deploying (Cloudflare Pages, no GitHub Actions)
+## Deploying (Netlify, DNS stays at the registrar)
 
-An alternative that needs neither GitHub Actions nor GitHub Pages (useful if Actions is
-unavailable). Cloudflare builds from the same repo; `public/404.html` is the not-found page
-(without it Cloudflare would serve the homepage for every unknown URL), `public/_headers` sets
-cache and security headers, and `.node-version` pins Node.
+An alternative that needs neither GitHub Actions nor GitHub Pages. Netlify serves an apex domain
+from any DNS provider, so only two web records change and the mail records (MX, SPF, ...) are not
+touched. (Cloudflare Pages would need the domain's nameservers moved to Cloudflare.)
+`netlify.toml` holds the build settings, `public/404.html` is the not-found page and
+`public/_headers` sets cache and security headers; `.node-version` pins Node.
 
-1. Cloudflare dashboard → **Workers & Pages → Create → Pages → Connect to Git**, pick this repo.
-2. Production branch `main`, **Build command** `node build.mjs --strict`, **Build output
-   directory** `dist`. No framework preset, no dependencies to install.
-3. After the first deploy: **Custom domains → Set up a domain → `usamas.com`** (and `www`).
-   Cloudflare asks for the domain's DNS to be on Cloudflare (change the nameservers at the
-   registrar, and re-create any existing records first, mail records included) or, for a
-   subdomain only, a CNAME to `<project>.pages.dev`.
-4. Use one host at a time: if you switch back to GitHub Pages, point the DNS records back as in
-   the table above.
+1. app.netlify.com → **Add new project → Import an existing project → GitHub**, pick this repo.
+   The build settings are read from `netlify.toml` (`node build.mjs --strict`, publish `dist`).
+2. After the first deploy: **Domain management → Add a domain → `usamas.com`** (and `www`).
+3. At the registrar's DNS, change only these two records and leave everything else as it is:
+
+   | Type  | Host  | Value |
+   |-------|-------|-------|
+   | A     | `@`   | `75.2.60.5` |
+   | CNAME | `www` | `<project>.netlify.app` |
+
+   Remove the registrar's parking records for `@` and `www`; they would clash with these.
+4. Back in Netlify, verify DNS and let it issue the HTTPS certificate. Check with
+   `dig usamas.com` and `dig www.usamas.com`, and check that mail (`dig MX usamas.com`) is unchanged.
+5. Use one host at a time: if you switch back to GitHub Pages, point the records back as in the
+   table above.
 
 ## Design notes
 

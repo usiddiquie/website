@@ -1,0 +1,4 @@
+# Build settings for Netlify (see README). Headers come from public/_headers.
+[build]
+  command = "node build.mjs --strict"
+  publish = "dist"
