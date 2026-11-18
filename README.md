@@ -102,6 +102,23 @@ repository**, separate from the private job-search repo.
 The build fails on purpose if `links.md` points to a file that is not in `public/` (for example
 `cv.pdf`), so a dead link cannot be deployed. Add the file or remove the link.
 
+## Deploying (Cloudflare Pages, no GitHub Actions)
+
+An alternative that needs neither GitHub Actions nor GitHub Pages (useful if Actions is
+unavailable). Cloudflare builds from the same repo; `public/404.html` is the not-found page
+(without it Cloudflare would serve the homepage for every unknown URL), `public/_headers` sets
+cache and security headers, and `.node-version` pins Node.
+
+1. Cloudflare dashboard → **Workers & Pages → Create → Pages → Connect to Git**, pick this repo.
+2. Production branch `main`, **Build command** `node build.mjs --strict`, **Build output
+   directory** `dist`. No framework preset, no dependencies to install.
+3. After the first deploy: **Custom domains → Set up a domain → `usamas.com`** (and `www`).
+   Cloudflare asks for the domain's DNS to be on Cloudflare (change the nameservers at the
+   registrar, and re-create any existing records first, mail records included) or, for a
+   subdomain only, a CNAME to `<project>.pages.dev`.
+4. Use one host at a time: if you switch back to GitHub Pages, point the DNS records back as in
+   the table above.
+
 ## Design notes
 
 Tokens in `public/style.css` come from the Figma file (colours, 2px dividers, 4px white thumbnail
